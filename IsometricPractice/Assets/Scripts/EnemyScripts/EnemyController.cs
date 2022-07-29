@@ -177,6 +177,23 @@ public class EnemyController : MonoBehaviour
         StartCoroutine(CountdownStunFromHit(stunDuration));
     }
 
+    public void PulledByWeapon(int damage, Vector3 hitPosition, float force, float stunDuration)
+    {
+        _currentHealth -= damage;
+        if (_currentHealth <= 0 && !_isDead)
+        {
+            _isDead = true;
+            UIManager.Instance.UpdateDeadMonsters();
+            Destroy(gameObject);
+        }
+
+        Vector3 hitDirection = transform.position - hitPosition;
+
+        _rb.AddForce(hitDirection * force / 8, ForceMode.Impulse);
+
+        StartCoroutine(CountdownStunFromHit(stunDuration));
+    }
+
     protected virtual void AttackingPlayer()
     {
 

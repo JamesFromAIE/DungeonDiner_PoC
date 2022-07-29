@@ -7,12 +7,14 @@ public class PlayerAnimator : MonoBehaviour
     [Header("Animations")]
     [SerializeField] Animator _animator;
 
+    private PlayerController _player;
+
     public float _lockedTill;
     public int _currentAttack = 0;
 
     void Start()
     {
-
+        _player = GetComponent<PlayerController>();
     }
 
     void Update()
@@ -27,14 +29,21 @@ public class PlayerAnimator : MonoBehaviour
 
     public void IncrementAttackCount()
     {
+        _player.IsThirdSwing(_currentAttack == 2);
+
         if (_currentAttack >= 3) return;
 
         _currentAttack++;
+        
+        
+        _player.SetMoveBool(false);
+        _player.AttackMove();
     }
 
     public void ResetAttackCount()
     {
         _currentAttack = 0;
+        _player.SetMoveBool(true);
     }
 
     private int GetState()

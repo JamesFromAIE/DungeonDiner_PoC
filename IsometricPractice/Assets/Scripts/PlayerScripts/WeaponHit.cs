@@ -9,11 +9,28 @@ public class WeaponHit : MonoBehaviour
     [SerializeField] float hitForce = 1f;
     [SerializeField] float stunDuration = 0f;
 
+    public Collider WeaponCollider { get; private set; }
+
+    public bool _isThirdSwing = false;
+
+    void Start()
+    {
+        WeaponCollider = GetComponent<Collider>();
+    }
+
+    public void IsWeaponCollEnabled(bool value)
+    {
+        WeaponCollider.enabled = value;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out EnemyController enemy))
         {
-            enemy.HitByWeapon(hitDamage, transform.position + new Vector3(0, 0.25f, 0), hitForce, stunDuration);
+            if (_isThirdSwing)
+                enemy.HitByWeapon(hitDamage, transform.position + new Vector3(0, 0.25f, 0), hitForce, stunDuration);
+            else
+                enemy.PulledByWeapon(hitDamage, transform.position + new Vector3(0, -0.25f, 0), hitForce, stunDuration);
         }
     }
 }

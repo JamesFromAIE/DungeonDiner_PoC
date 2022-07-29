@@ -11,20 +11,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _turnSpeed = 15f;
     [SerializeField] float _dashSpeed = 5f;
     [SerializeField] float _dashCooldown = 2f;
+    [SerializeField] float _attackMoveSpeed = 2f;
 
     [Header("Combat")]
     [SerializeField] float _maxHealth = 100f;
     [SerializeField] float _invulnerableTime = 2f;
-    [SerializeField] Transform _weapon;
-    [SerializeField] float _weaponSpeed = 1f;
-    [SerializeField] float _weaponSwingOffset = -45;
+    [SerializeField] WeaponHit _weapon;
 
     private PlayerAnimator _pAnimator;
 
-    private Quaternion _weaponRotation;
     private float _currentHealth;
     private bool _canDash = true;
     private bool _canAttack = true;
+    private bool _canMove = true;
     public bool _isInvulnerable { get; private set; } = false;
 
     private Vector3 _input;
@@ -35,15 +34,12 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _pAnimator = GetComponent<PlayerAnimator>();
         _currentHealth = _maxHealth;
-        _weaponRotation = _weapon.localRotation;
-        //_weapon.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        if (/*_canAttack && */Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            //StartCoroutine(SwingWeapon());
             _pAnimator.IncrementAttackCount();
         }
 
@@ -68,6 +64,17 @@ public class PlayerController : MonoBehaviour
         _input = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
     }
 
+    public void SetMoveBool(bool value)
+    {
+        _canMove = value;
+        _weapon.IsWeaponCollEnabled(!value);
+    }
+
+    public void AttackMove()
+    {
+        _rb.AddForce(transform.forward * _attackMoveSpeed, ForceMode.Impulse);
+    }
+
     void Look()
     {
         if (_input == Vector3.zero) return;
@@ -83,15 +90,20 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        if (!_canMove) return;
+
         if (_input.magnitude > 1) _rb.MovePosition(transform.position + (transform.forward * 1) * _moveSpeed * Time.deltaTime);
         else _rb.MovePosition(transform.position + (transform.forward * _input.magnitude) * _moveSpeed * Time.deltaTime);
     }
 
     void ClampDash()
     {
-        if (_canDash) return;
+        if (!_canDash) _rb.velocity = _rb.velocity * 0.9f; 
+        else if (!_canMove) _rb.velocity = _rb.velocity * 0.9f;
 
-        _rb.velocity = _rb.velocity * 0.9f;
+
+
+        
 
     }
 
@@ -135,6 +147,11 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(CountdownInvulnerability());
     }
 
+    public void IsThirdSwing(bool value)
+    {
+        _weapon._isThirdSwing = value;
+    }
+
     IEnumerator CountdownInvulnerability()
     {
         _isInvulnerable = true;
@@ -155,29 +172,6 @@ public class PlayerController : MonoBehaviour
         _isInvulnerable = false;
     }
 
-    IEnumerator SwingWeapon()
-    {
-        _canAttack = false;
-        _weapon.gameObject.SetActive(true);
-
-        Vector3 initialRotation = _weapon.localEulerAngles;
-
-        float normalisedTime = 0;
-        while (normalisedTime < 1f)
-        {
-            _weapon.localRotation = Quaternion.Euler(0, (normalisedTime * 180) + _weaponSwingOffset, initialRotation.z);
-
-            normalisedTime += Time.deltaTime / _weaponSpeed;
-
-            yield return null;
-        }
-
-        _weapon.rotation = _weaponRotation;
-        _weapon.gameObject.SetActive(false);
-
-
-        _canAttack = true;
-    }
     #endregion
 
 

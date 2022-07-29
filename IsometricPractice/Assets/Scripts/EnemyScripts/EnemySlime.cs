@@ -19,10 +19,12 @@ public class EnemySlime : EnemyController
     {
         _isAttacking = true;
 
+        Vector3 playerPos = Player.transform.position;
+
         yield return Helper.GetWait(_jumpChargeTime);
 
         Vector3 offset = new Vector3(0, 1.5f, 0);
-        Vector3 jumpDirection = (Player.transform.position - transform.position) + offset;
+        Vector3 jumpDirection = (playerPos - transform.position) + offset;
 
         _rb.AddForce(jumpDirection * _jumpForce, ForceMode.VelocityChange);
 
