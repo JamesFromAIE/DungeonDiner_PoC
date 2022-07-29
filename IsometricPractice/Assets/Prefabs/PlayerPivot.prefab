@@ -177,8 +177,10 @@ GameObject:
   m_Component:
   - component: {fileID: 2643748525574018319}
   - component: {fileID: 2643748525574018314}
+  - component: {fileID: 5050089947704708015}
   - component: {fileID: 2643748525574018315}
   - component: {fileID: 2643748525574018313}
+  - component: {fileID: 7971583963049776699}
   m_Layer: 0
   m_Name: PlayerPivot
   m_TagString: Untagged
@@ -217,8 +219,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 8
   _turnSpeed: 10
+  _dashSpeed: 5
+  _dashCooldown: 2
+  _maxHealth: 100
+  _invulnerableTime: 2
   _weapon: {fileID: 2643748525624311535}
   _weaponSpeed: 0.5
+  _weaponSwingOffset: -45
+--- !u!114 &5050089947704708015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2643748525574018318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fd8e0d11b53684eac8ce8e8b6079a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 7971583963049776699}
 --- !u!65 &2643748525574018315
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -248,6 +268,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!95 &7971583963049776699
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2643748525574018318}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ae4b5e427f5894f47906a53897ee30ad, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2643748525624311534
 GameObject:
   m_ObjectHideFlags: 0

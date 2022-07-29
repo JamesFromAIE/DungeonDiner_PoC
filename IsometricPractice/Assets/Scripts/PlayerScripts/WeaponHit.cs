@@ -13,7 +13,7 @@ public class WeaponHit : MonoBehaviour
     {
         if (other.TryGetComponent(out EnemyController enemy))
         {
-            enemy.HitByWeapon(hitDamage, transform.position, hitForce, stunDuration);
+            enemy.HitByWeapon(hitDamage, transform.position + new Vector3(0, 0.25f, 0), hitForce, stunDuration);
         }
     }
 }

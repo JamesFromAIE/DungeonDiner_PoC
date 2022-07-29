@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _weaponSpeed = 1f;
     [SerializeField] float _weaponSwingOffset = -45;
 
+    private PlayerAnimator _pAnimator;
+
     private Quaternion _weaponRotation;
     private float _currentHealth;
     private bool _canDash = true;
@@ -31,16 +33,18 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _pAnimator = GetComponent<PlayerAnimator>();
         _currentHealth = _maxHealth;
         _weaponRotation = _weapon.localRotation;
-        _weapon.gameObject.SetActive(false);
+        //_weapon.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        if (_canAttack && Input.GetMouseButtonDown(0))
+        if (/*_canAttack && */Input.GetMouseButtonDown(0))
         {
-            StartCoroutine(SwingWeapon());
+            //StartCoroutine(SwingWeapon());
+            _pAnimator.IncrementAttackCount();
         }
 
         if (_canDash && Input.GetKeyDown(KeyCode.Space))
