@@ -40,6 +40,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected float _turnSpeed;
     public LayerMask _idleAvoidLayers;
 
+    [Header("Sound")]
+    [SerializeField] SoundPlayer _hitSound;
+    [SerializeField] SoundPlayer _deadSound;
+
     void Awake()
     {
         Player = FindObjectOfType<PlayerController>();
@@ -170,11 +174,7 @@ public class EnemyController : MonoBehaviour
         _currentHealth -= damage;
         if (_currentHealth <= 0 && !_isDead)
         {
-            _isDead = true;
-            if (_deathPEffect != null) Instantiate(_deathPEffect, transform.position, _deathPEffect.transform.rotation, null);
-
-            UIManager.Instance.UpdateDeadMonsters();
-            Destroy(gameObject);
+            KillMe();
         }
 
         Vector3 hitDirection = transform.position - hitPosition;
@@ -190,11 +190,7 @@ public class EnemyController : MonoBehaviour
         _currentHealth -= damage;
         if (_currentHealth <= 0 && !_isDead)
         {
-            _isDead = true;
-            if (_deathPEffect != null) Instantiate(_deathPEffect, transform.position, _deathPEffect.transform.rotation, null);
-
-            UIManager.Instance.UpdateDeadMonsters();
-            Destroy(gameObject);
+            KillMe();
         }
 
         Vector3 hitDirection = transform.position - hitPosition;
@@ -203,6 +199,7 @@ public class EnemyController : MonoBehaviour
 
         StartCoroutine(CountdownStunFromHit(stunDuration));
         StartCoroutine(FlashHitBlink());
+        _hitSound?.Play();
     }
 
     protected virtual void AttackingPlayer()
@@ -231,6 +228,25 @@ public class EnemyController : MonoBehaviour
 
         SetMaterialInMeshRenderers(meshes, _origMat);
     }
+
+    void KillMe()
+    {
+        if (_isDead) return;
+
+        _isDead = true;
+        if (_deathPEffect != null) Instantiate(_deathPEffect, transform.position, _deathPEffect.transform.rotation, null);
+
+        UIManager.Instance.UpdateDeadMonsters();
+        Destroy(gameObject, 1);
+
+        StopAllCoroutines();
+        _rb.constraints = RigidbodyConstraints.None;
+        _rb.mass = _rb.mass / 3;
+        this.enabled = false;
+
+        _deadSound?.Play();
+    }
+
     #endregion
 
     #region Visuals
@@ -264,12 +280,6 @@ public class EnemyController : MonoBehaviour
 
     #endregion
 
-
-
-    private void OnDestroy()
-    {
-        StopAllCoroutines();
-    }
 
     void OnDrawGizmos()
     {

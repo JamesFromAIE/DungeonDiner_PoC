@@ -44,7 +44,7 @@ public class EnemySlime : EnemyController
     {
         if (other.TryGetComponent(out PlayerController player))
         {
-            if (player._isInvulnerable) return;
+            if (player._isInvulnerable || State == EnemyState.Hit || _isDead) return;
 
             player.HitByEnemy(_attackDamage);
         }
