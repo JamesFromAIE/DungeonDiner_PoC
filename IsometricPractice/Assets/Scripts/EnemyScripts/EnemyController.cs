@@ -30,6 +30,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected float _attackCooldown; // PROTECTED VARIABLE FOR CHILDREN
     protected bool _isAttacking = false; // PROTECTED VARIABLE FOR CHILDREN
     protected bool _isDead = false;
+    private Material _origMat;
+    [SerializeField] Material _hitMat;
+    [SerializeField] float _hitBlinkTimer = 0.15f;
+    [SerializeField] ParticleSystem _deathPEffect;
 
     [Header("Movement")]
     [SerializeField] protected float _speed;
@@ -46,6 +50,7 @@ public class EnemyController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _idlePosition = transform.position;
         _currentHealth = _maxHealth;
+        _origMat = GetComponentInChildren<MeshRenderer>().material;
     }
 
     #region Movement
@@ -166,6 +171,8 @@ public class EnemyController : MonoBehaviour
         if (_currentHealth <= 0 && !_isDead)
         {
             _isDead = true;
+            if (_deathPEffect != null) Instantiate(_deathPEffect, transform.position, _deathPEffect.transform.rotation, null);
+
             UIManager.Instance.UpdateDeadMonsters();
             Destroy(gameObject);
         }
@@ -175,6 +182,7 @@ public class EnemyController : MonoBehaviour
         _rb.AddForce(hitDirection * force, ForceMode.Impulse);
 
         StartCoroutine(CountdownStunFromHit(stunDuration));
+        StartCoroutine(FlashHitBlink());
     }
 
     public void PulledByWeapon(int damage, Vector3 hitPosition, float force, float stunDuration)
@@ -183,15 +191,18 @@ public class EnemyController : MonoBehaviour
         if (_currentHealth <= 0 && !_isDead)
         {
             _isDead = true;
+            if (_deathPEffect != null) Instantiate(_deathPEffect, transform.position, _deathPEffect.transform.rotation, null);
+
             UIManager.Instance.UpdateDeadMonsters();
             Destroy(gameObject);
         }
 
         Vector3 hitDirection = transform.position - hitPosition;
 
-        _rb.AddForce(hitDirection * force / 8, ForceMode.Impulse);
+        _rb.AddForce(hitDirection * force / 5, ForceMode.Impulse);
 
         StartCoroutine(CountdownStunFromHit(stunDuration));
+        StartCoroutine(FlashHitBlink());
     }
 
     protected virtual void AttackingPlayer()
@@ -205,20 +216,51 @@ public class EnemyController : MonoBehaviour
 
         yield return Helper.GetWait(stunDuration);
 
-        /*
-        float normalisedTime = 0;
-
-        while (normalisedTime < 1f)
-        {
-            normalisedTime += Time.deltaTime / stunDuration;
-            yield return null;
-        }
-        */
-
         ChangeEnemyState(EnemyState.Alert);
     }
 
-    
+    IEnumerator FlashHitBlink()
+    {
+        MeshRenderer[] meshes = GetComponentsInChildren<MeshRenderer>();
+
+        if (meshes.Length == 0) Debug.LogError("No Mesh Renderers found on " + name);
+
+        SetMaterialInMeshRenderers(meshes, _hitMat);
+
+        yield return Helper.GetWait(_hitBlinkTimer);
+
+        SetMaterialInMeshRenderers(meshes, _origMat);
+    }
+    #endregion
+
+    #region Visuals
+
+    void SetMaterialsInMeshRenderers(MeshRenderer[] meshes, Material mat)
+    {
+        for (int i = 0; i < meshes.Length; i++)
+        {
+            MeshRenderer mesh = meshes[i];
+            int materialsLength = mesh.materials.Length;
+            Material[] matArray = new Material[materialsLength];
+
+            for (int j = 0; j < materialsLength; j++)
+            {
+                matArray[j] = mat;
+            }
+
+            mesh.materials = matArray;
+        }
+    }
+
+    void SetMaterialInMeshRenderers(MeshRenderer[] meshes, Material mat)
+    {
+        for (int i = 0; i < meshes.Length; i++)
+        {
+            MeshRenderer mesh = meshes[i];
+
+            mesh.material = mat;
+        }
+    }
 
     #endregion
 

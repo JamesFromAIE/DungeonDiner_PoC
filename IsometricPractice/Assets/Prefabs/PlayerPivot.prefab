@@ -221,11 +221,12 @@ MonoBehaviour:
   _turnSpeed: 10
   _dashSpeed: 5
   _dashCooldown: 2
+  _attackMoveSpeed: 2
   _maxHealth: 100
   _invulnerableTime: 2
-  _weapon: {fileID: 2643748525624311535}
-  _weaponSpeed: 0.5
-  _weaponSwingOffset: -45
+  _weapon: {fileID: 2643748525624311529}
+  _hitMat: {fileID: 2100000, guid: d4794cdef716fbc4d87a9813dd09b9a7, type: 2}
+  _blinkRate: 12
 --- !u!114 &5050089947704708015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +240,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 7971583963049776699}
+  _lockedTill: 0
+  _currentAttack: 0
 --- !u!65 &2643748525574018315
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -337,6 +340,7 @@ MonoBehaviour:
   hitDamage: 20
   hitForce: 18
   stunDuration: 0.25
+  _isThirdSwing: 0
 --- !u!65 &2643748525624311528
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -346,7 +350,7 @@ BoxCollider:
   m_GameObject: {fileID: 2643748525624311534}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.7, y: 0.5, z: 1.5}
   m_Center: {x: 0, y: 0, z: 2.25}

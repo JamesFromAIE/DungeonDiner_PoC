@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _maxHealth = 100f;
     [SerializeField] float _invulnerableTime = 2f;
     [SerializeField] WeaponHit _weapon;
+    [SerializeField] Material _hitMat;
+    private Material _origMat;
+    [SerializeField] int _blinkRate = 4;
+    private MeshRenderer[] meshes;
+
 
     private PlayerAnimator _pAnimator;
 
@@ -34,6 +39,9 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _pAnimator = GetComponent<PlayerAnimator>();
         _currentHealth = _maxHealth;
+
+        meshes = GetComponentsInChildren<MeshRenderer>();
+        _origMat = meshes[0].material;
     }
 
     void Update()
@@ -142,8 +150,8 @@ public class PlayerController : MonoBehaviour
             UIManager.Instance.DisplayDeadUI();
             this.enabled = false;
         }
-        
 
+        StartCoroutine(BlinkInvulnerability());
         StartCoroutine(CountdownInvulnerability());
     }
 
@@ -152,22 +160,76 @@ public class PlayerController : MonoBehaviour
         _weapon._isThirdSwing = value;
     }
 
+    IEnumerator BlinkInvulnerability()
+    {
+        float normalisedTime = 0;
+
+        float blinkIntervals = 1f / _blinkRate; // 4 => 0.25f
+
+        Threshold[] thresholdArray = SetThresholdArray(blinkIntervals, _blinkRate);
+        bool isBlinkOffset = false;
+
+        while (normalisedTime <= 1f)
+        {
+            bool isOffset = IsThisOffsetEven(thresholdArray, normalisedTime);
+
+            normalisedTime += Time.deltaTime / _invulnerableTime;
+
+            if (isOffset != isBlinkOffset) yield return null;
+
+            isBlinkOffset = isOffset;
+
+            if (isBlinkOffset) SetMaterialInMeshRenderers(_hitMat);
+            else SetMaterialInMeshRenderers(_origMat);
+
+            yield return null;
+        }
+
+        SetMaterialInMeshRenderers(_origMat);
+    }
+
+    bool IsThisOffsetEven(Threshold[] threshArray, float time)
+    {
+        for (int i = threshArray.Length - 1; i >= 0; i--)
+        {
+            Threshold thresh = threshArray[i];
+            if (time > thresh.Capacity) return thresh.IsOffset; 
+        }
+
+        return true;
+    }
+
+    Threshold[] SetThresholdArray(float capacity, int rate)
+    {
+        Threshold[] thresholds = new Threshold[rate]; // 4 => [0, 0, 0, 0]
+
+        for (int i = 0; i < rate; i++)
+        {
+            Threshold threshold = new Threshold();
+
+            threshold.Init(capacity * i, i % 2 == 0);  // 4 => [0, 0.25, 0.50, 0.75]
+
+            thresholds[i] = threshold;
+        }
+
+        return thresholds;
+    }
+
+    void SetMaterialInMeshRenderers(Material newMat)
+    {
+        for (int i = 0; i < meshes.Length; i++)
+        {
+            MeshRenderer mesh = meshes[i];
+
+            mesh.material = newMat;
+        }
+    }
+
     IEnumerator CountdownInvulnerability()
     {
         _isInvulnerable = true;
 
         yield return Helper.GetWait(_invulnerableTime);
-
-        /*
-        float normalisedTime = 0;
-
-        while (normalisedTime < 1f)
-        {
-            normalisedTime += Time.deltaTime / _invulnerableTime;
-
-            yield return null;
-        }
-        */
 
         _isInvulnerable = false;
     }
@@ -175,4 +237,18 @@ public class PlayerController : MonoBehaviour
     #endregion
 
 
+}
+
+public class Threshold
+{
+    public bool IsOffset { get; private set; }
+    public float Capacity { get; private set; }
+
+    public Threshold Init(float capacity, bool offset)
+    {
+        Capacity = capacity;
+        IsOffset = offset;
+
+        return new Threshold();
+    }
 }

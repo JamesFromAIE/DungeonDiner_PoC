@@ -24,7 +24,7 @@ public class EnemySlime : EnemyController
         yield return Helper.GetWait(_jumpChargeTime);
 
         Vector3 offset = new Vector3(0, 1.5f, 0);
-        Vector3 jumpDirection = (playerPos - transform.position) + offset;
+        Vector3 jumpDirection = ((playerPos - transform.position) + offset).normalized;
 
         _rb.AddForce(jumpDirection * _jumpForce, ForceMode.VelocityChange);
 

@@ -135,12 +135,16 @@ MonoBehaviour:
   _maxHealth: 80
   _attackDamage: 25
   _attackCooldown: 4
+  _hitMat: {fileID: 2100000, guid: d4794cdef716fbc4d87a9813dd09b9a7, type: 2}
+  _hitBlinkTimer: 0.15
+  _deathPEffect: {fileID: 9185303654295947920, guid: abb4d1cf92571764f91e6cfa6444ed35,
+    type: 3}
   _speed: 0.4
   _turnSpeed: 30
   _idleAvoidLayers:
     serializedVersion: 2
     m_Bits: 64
-  _jumpForce: 3
+  _jumpForce: 12
   _jumpChargeTime: 0.75
 --- !u!114 &139359576644015091
 MonoBehaviour:
