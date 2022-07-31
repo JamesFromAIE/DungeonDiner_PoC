@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _attackMoveSpeed = 2f;
 
     [Header("Combat")]
+    public bool _developmentTurnAttack = false;
     [SerializeField] float _maxHealth = 100f;
     [SerializeField] float _invulnerableTime = 2f;
     [SerializeField] WeaponHit _weapon;
@@ -48,18 +49,30 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            _pAnimator.IncrementAttackCount();
-        }
-
         if (_canDash && Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(Dash());
+            Look();
+            if (_input != Vector3.zero)
+            {
+                Vector3 relative = (transform.position + _input.ToIso()) - transform.position;
+                StartCoroutine(Dash(relative));
+            }
+            else StartCoroutine(Dash(transform.forward));
         }
 
         GatherInput();
-        Look();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (_developmentTurnAttack)
+                MouseLook();
+            else Look();
+
+            _pAnimator.IncrementAttackCount();
+        }
+
+        if (_developmentTurnAttack && !(_pAnimator._currentAttack > 0))
+            Look();
     }
 
     void FixedUpdate()
@@ -76,6 +89,8 @@ public class PlayerController : MonoBehaviour
 
     public void SetMoveBool(bool value)
     {
+        //if (_developmentTurnAttack) value = true;
+
         _canMove = value;
         _weapon.IsWeaponCollEnabled(!value);
     }
@@ -96,6 +111,27 @@ public class PlayerController : MonoBehaviour
 
         // Set Rotation to movement direction
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, _turnSpeed);
+    }
+
+    Vector3 MouseLook()
+    {
+        RaycastHit hit;
+        Vector3 lookDirection = Vector3.zero;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out hit, 100f, 1 << 10))
+        {
+            lookDirection = hit.point.FloorV3() - transform.position;
+
+            // Turn direction into a Quaternion
+            Quaternion rot = Quaternion.LookRotation(lookDirection, Vector3.up);
+
+            // Set Rotation to movement direction
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, _turnSpeed * 10);
+        }
+
+        return lookDirection;
     }
 
     void Move()
@@ -119,25 +155,15 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    IEnumerator Dash()
+    IEnumerator Dash(Vector3 dashDirection)
     {
         _canDash = false;
 
         _pAnimator.ResetAttackCount();
 
-        _rb.AddForce(transform.forward * _dashSpeed, ForceMode.VelocityChange);
+        _rb.AddForce(dashDirection.normalized * _dashSpeed, ForceMode.VelocityChange);
 
         yield return Helper.GetWait(_dashCooldown);
-
-        /*
-        float normalisedTime = 0;
-        while (normalisedTime < 1f)
-        {
-            normalisedTime += Time.deltaTime / _dashCooldown;
-
-            yield return null;
-        }
-        */
 
         _canDash = true;
     }

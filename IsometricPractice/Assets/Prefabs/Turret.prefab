@@ -279,7 +279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHealth: 50
   _attackDamage: 10
-  _attackCooldown: 0.75
+  _attackCooldown: 1.25
   _hitMat: {fileID: 2100000, guid: d4794cdef716fbc4d87a9813dd09b9a7, type: 2}
   _hitBlinkTimer: 0.15
   _deathPEffect: {fileID: 0}

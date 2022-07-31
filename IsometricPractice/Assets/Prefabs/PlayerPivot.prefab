@@ -219,10 +219,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 8
-  _turnSpeed: 10
-  _dashSpeed: 5
-  _dashCooldown: 2
-  _attackMoveSpeed: 2
+  _turnSpeed: 35
+  _dashSpeed: 32
+  _dashCooldown: 1
+  _attackMoveSpeed: 4
+  _developmentTurnAttack: 1
   _maxHealth: 100
   _invulnerableTime: 2
   _weapon: {fileID: 2643748525624311529}
@@ -240,7 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a14d21992d0c0d74abf1b348d3541b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxSlotCapacity: 5
+  _maxSlotCapacity: 9
 --- !u!114 &5050089947704708015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,8 +255,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 7971583963049776699}
-  _lockedTill: 0
-  _currentAttack: 0
 --- !u!54 &2643748525574018313
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -351,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a1bbed3e13037a4aaa5dc9507d30def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitDamage: 20
+  hitDamage: 15
   hitForce: 18
   stunDuration: 0.25
   _isThirdSwing: 0

@@ -9,8 +9,8 @@ public class PlayerAnimator : MonoBehaviour
 
     private PlayerController _player;
 
-    public float _lockedTill;
-    public int _currentAttack = 0;
+    private float _lockedTill;
+    public int _currentAttack { get; private set; } = 0;
 
     void Start()
     {
