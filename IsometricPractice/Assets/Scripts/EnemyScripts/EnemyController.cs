@@ -34,6 +34,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] Material _hitMat;
     [SerializeField] float _hitBlinkTimer = 0.15f;
     [SerializeField] ParticleSystem _deathPEffect;
+    [Tooltip("Do NOT ADD more than ONE of the SAME drop in this LIST.")]
+    public List<DropProbability> _allDrops = new List<DropProbability>();
 
     [Header("Movement")]
     [SerializeField] protected float _speed;
@@ -47,14 +49,16 @@ public class EnemyController : MonoBehaviour
     void Awake()
     {
         Player = FindObjectOfType<PlayerController>();
-    }
 
-    void Start()
-    {
         _rb = GetComponent<Rigidbody>();
         _idlePosition = transform.position;
         _currentHealth = _maxHealth;
         _origMat = GetComponentInChildren<MeshRenderer>().material;
+    }
+
+    void Start()
+    {
+        
     }
 
     #region Movement
@@ -236,6 +240,7 @@ public class EnemyController : MonoBehaviour
         _isDead = true;
         if (_deathPEffect != null) Instantiate(_deathPEffect, transform.position, _deathPEffect.transform.rotation, null);
 
+        DropsManager.Instance.DropLoot(transform.position.FloorV3(), _allDrops);
         UIManager.Instance.UpdateDeadMonsters();
         Destroy(gameObject, 1);
 
@@ -288,4 +293,21 @@ public class EnemyController : MonoBehaviour
     }
 
     
+}
+
+[System.Serializable]
+public class DropProbability
+{
+    [SerializeField] ScriptableDrops _drop;
+    public ScriptableDrops Drop { get { return _drop; } }
+
+    [SerializeField] int _weight;
+    public int Weight { get { return _weight; } }
+
+
+    public DropProbability(ScriptableDrops drop, int weight)
+    {
+        _drop = drop;
+        _weight = weight;
+    }
 }

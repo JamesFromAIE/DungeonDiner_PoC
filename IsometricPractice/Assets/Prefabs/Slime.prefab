@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4962485390079886499}
   - component: {fileID: 721763460410667214}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player_SlimeDead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,7 +56,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5788998738495095208}
   - component: {fileID: 7072182695842234417}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player_SlimeHit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 7914102233782928545}
   - component: {fileID: 4941279399479298503}
   - component: {fileID: 4941279399479298502}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Slime
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,6 +149,9 @@ MonoBehaviour:
   _hitBlinkTimer: 0.15
   _deathPEffect: {fileID: 9185303654295947920, guid: aadf36b5e26b0c748a5d7c050ae4be45,
     type: 3}
+  _allDrops:
+  - _drop: {fileID: 11400000, guid: 96f400d25d466aa47a68f48f027e438c, type: 2}
+    _weight: 1
   _speed: 0.5
   _turnSpeed: 30
   _idleAvoidLayers:
@@ -158,6 +161,7 @@ MonoBehaviour:
   _deadSound: {fileID: 721763460410667214}
   _jumpForce: 8
   _jumpChargeTime: 0.5
+  _mesh: {fileID: 4941279400020931801}
 --- !u!114 &4941279399479298501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,7 +229,7 @@ GameObject:
   - component: {fileID: 4941279400020931799}
   - component: {fileID: 4941279400020931800}
   - component: {fileID: 4941279400020931801}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SlimeMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -306,7 +310,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 499686932067671962}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SlimeSounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}

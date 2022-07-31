@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 77944566756625655}
   - component: {fileID: 77944566756625648}
   - component: {fileID: 77944566756625649}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TurretWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 77944567009988448}
   - component: {fileID: 77944567009988449}
   - component: {fileID: 77944567009988450}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TurretBarrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 77944567391011676}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BarrelTip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 77944567411074977}
   - component: {fileID: 77944567411074978}
   - component: {fileID: 77944567411074979}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,11 +283,14 @@ MonoBehaviour:
   _hitMat: {fileID: 2100000, guid: d4794cdef716fbc4d87a9813dd09b9a7, type: 2}
   _hitBlinkTimer: 0.15
   _deathPEffect: {fileID: 0}
+  _allDrops: []
   _speed: 0.3
   _turnSpeed: 60
   _idleAvoidLayers:
     serializedVersion: 2
     m_Bits: 64
+  _hitSound: {fileID: 0}
+  _deadSound: {fileID: 0}
   _targetOffset: {x: 0, y: 1.8, z: 0}
   _barrelTip: {fileID: 77944567391011676}
   _projectile: {fileID: 6899563870943292011, guid: bdd4c006c000f0e4e9e7196a2e4c77ce,
@@ -347,7 +350,7 @@ GameObject:
   - component: {fileID: 77944568103261583}
   - component: {fileID: 77944568103261576}
   - component: {fileID: 77944568103261577}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TurretMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}

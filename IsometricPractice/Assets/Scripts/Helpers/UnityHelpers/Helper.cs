@@ -17,6 +17,11 @@ public static class Helper
         return WaitDictionary[time];
     }
 
+    public static Vector3 FloorV3(this Vector3 oldV3)
+    {
+        return new Vector3(oldV3.x, 0, oldV3.z);
+    }
+
     public static int Positive(int number)
     {
         return number < 0 ? number * -1 : number;

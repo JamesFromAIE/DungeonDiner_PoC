@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167b09070e425a3479de44eff7a16c7e, type: 3}
+  m_Name: Slime2Drop
+  m_EditorClassIdentifier: 
+  _name: Drop_Slime2
+  _type: 11
+  _mat: {fileID: 2100000, guid: 95a0331135a44a447b816bf915495f89, type: 2}
+  _sprite: {fileID: 21300000, guid: 33b5a5a86eeac094c99178dd952d652d, type: 3}

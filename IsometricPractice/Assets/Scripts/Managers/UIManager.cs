@@ -7,15 +7,55 @@ using TMPro;
 
 public class UIManager : Singleton<UIManager>
 {
+    [Header("Combat")]
+    [SerializeField] int _slainGoal = 10;
+    private int _slainMonsters = 0;
     [SerializeField] Slider _healthBar;
+
+    [Header("Game")]
     [SerializeField] Button _restartButton;
     [SerializeField] Button _quitButton;
 
-    [SerializeField] int _slainGoal = 10;
-    private int _slainMonsters = 0;
+
     [SerializeField] TMP_Text _enemyText;
     [SerializeField] TMP_Text _winText;
     [SerializeField] TMP_Text _deadText;
+
+
+    [Header("Inventory")]
+    [SerializeField] int targetSlotCount;
+    [SerializeField] HorizontalLayoutGroup _inventorySpace;
+    [SerializeField] UISlot _slotPrefab;
+
+    private UISlot[] _uiSlots;
+
+
+    public int InitialiseInventoryUI()
+    {
+        int inventoryWidth = (int)_inventorySpace.GetComponent<RectTransform>().rect.width;
+        int slotWidth = (int)_slotPrefab.GetComponent<RectTransform>().rect.width;
+
+        int maxNumberOfSlots = (inventoryWidth / slotWidth);
+
+        if (inventoryWidth % slotWidth < slotWidth - 1) maxNumberOfSlots--;
+
+        _uiSlots = new UISlot[Mathf.Min(targetSlotCount, maxNumberOfSlots)];
+
+        for (int i = 0; i < _uiSlots.Length; i++)
+        {
+            var newSlot = _uiSlots[i] = Instantiate(_slotPrefab, _inventorySpace.transform.position, Quaternion.identity, _inventorySpace.transform);
+            newSlot.Init();
+        }
+
+        return _uiSlots.Length;
+    }
+
+    public void UpdateSlot(int index, InventorySlot contents)
+    {
+        UISlot slot = _uiSlots[index];
+
+        slot.UpdateSlotValues(contents);
+    }
 
     public void UpdateHealth(float health)
     {
@@ -55,3 +95,5 @@ public class UIManager : Singleton<UIManager>
         Application.Quit();
     }
 }
+
+

@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int _blinkRate = 4;
     private MeshRenderer[] meshes;
 
-
+    private PlayerInventory _pInventory;
     private PlayerAnimator _pAnimator;
 
     private float _currentHealth;
@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private bool _canAttack = true;
     private bool _canMove = true;
     public bool _isInvulnerable { get; private set; } = false;
+    public bool _canPickUp { get; private set; } = true;
 
     private Vector3 _input;
     private Rigidbody _rb;
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _pAnimator = GetComponent<PlayerAnimator>();
+        _pInventory = GetComponent<PlayerInventory>();
         _currentHealth = _maxHealth;
 
         meshes = GetComponentsInChildren<MeshRenderer>();
@@ -106,18 +108,22 @@ public class PlayerController : MonoBehaviour
 
     void ClampDash()
     {
-        if (!_canDash) _rb.velocity = _rb.velocity * 0.9f; 
-        else if (!_canMove) _rb.velocity = _rb.velocity * 0.9f;
+        //if (_isInvulnerable) return;
+
+        if (_pAnimator._currentAttack == 3) _rb.velocity = _rb.velocity * 0.8f;
+        else if (_pAnimator._currentAttack > 0) _rb.velocity = _rb.velocity * 0.6f;
 
 
-
+        else if (!_canDash) _rb.velocity = _rb.velocity * 0.80f;
+        else if (!_canMove) _rb.velocity = _rb.velocity * 0.80f;
         
-
     }
 
     IEnumerator Dash()
     {
         _canDash = false;
+
+        _pAnimator.ResetAttackCount();
 
         _rb.AddForce(transform.forward * _dashSpeed, ForceMode.VelocityChange);
 
@@ -145,6 +151,8 @@ public class PlayerController : MonoBehaviour
 
         UIManager.Instance.UpdateHealth(_currentHealth);
 
+        _pInventory.DropEntireInventory();
+
         if (_currentHealth <= 0)
         {
             UIManager.Instance.DisplayDeadUI();
@@ -164,6 +172,8 @@ public class PlayerController : MonoBehaviour
     {
         float normalisedTime = 0;
 
+        _canPickUp = false;
+
         float blinkIntervals = 1f / _blinkRate; // 4 => 0.25f
 
         Threshold[] thresholdArray = SetThresholdArray(blinkIntervals, _blinkRate);
@@ -171,6 +181,9 @@ public class PlayerController : MonoBehaviour
 
         while (normalisedTime <= 1f)
         {
+            if (normalisedTime < 0.25f) _canPickUp = false;
+            else _canPickUp = true;
+
             bool isOffset = IsThisOffsetEven(thresholdArray, normalisedTime);
 
             normalisedTime += Time.deltaTime / _invulnerableTime;

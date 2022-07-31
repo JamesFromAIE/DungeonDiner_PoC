@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2643748524155736317}
   - component: {fileID: 2643748524155736316}
   - component: {fileID: 2643748524155736291}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 2643748525301868796}
   - component: {fileID: 2643748525301868771}
   - component: {fileID: 2643748525301868770}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,11 +177,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2643748525574018319}
   - component: {fileID: 2643748525574018314}
+  - component: {fileID: 4273610511603588669}
   - component: {fileID: 5050089947704708015}
-  - component: {fileID: 2643748525574018315}
   - component: {fileID: 2643748525574018313}
   - component: {fileID: 7971583963049776699}
-  m_Layer: 0
+  - component: {fileID: 3840899439380634557}
+  m_Layer: 9
   m_Name: PlayerPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,6 +228,19 @@ MonoBehaviour:
   _weapon: {fileID: 2643748525624311529}
   _hitMat: {fileID: 2100000, guid: d4794cdef716fbc4d87a9813dd09b9a7, type: 2}
   _blinkRate: 12
+--- !u!114 &4273610511603588669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2643748525574018318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14d21992d0c0d74abf1b348d3541b30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxSlotCapacity: 5
 --- !u!114 &5050089947704708015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,19 +256,6 @@ MonoBehaviour:
   _animator: {fileID: 7971583963049776699}
   _lockedTill: 0
   _currentAttack: 0
---- !u!65 &2643748525574018315
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2643748525574018318}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &2643748525574018313
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -291,6 +292,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &3840899439380634557
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2643748525574018318}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &2643748525624311534
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +316,7 @@ GameObject:
   - component: {fileID: 2643748525624311535}
   - component: {fileID: 2643748525624311529}
   - component: {fileID: 2643748525624311528}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WeaponHilt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +379,7 @@ GameObject:
   - component: {fileID: 2643748525685104771}
   - component: {fileID: 2643748525685104798}
   - component: {fileID: 2643748525685104797}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerGoggles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
