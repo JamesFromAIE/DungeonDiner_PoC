@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class CustomerSatisfaction : MonoBehaviour
 {
@@ -13,30 +14,32 @@ public class CustomerSatisfaction : MonoBehaviour
     [SerializeField] float neutralTime;
     [SerializeField] float angryTime;
 
+    [SerializeField] Transform customerSeat;
+    [SerializeField] Transform resturantExitBox;
 
+    NavMeshAgent agent;
 
     void Start()
-    {       
+    {   
+        agent = GetComponent<NavMeshAgent>();
+        agent.destination = customerSeat.position;
 
         happyFace.enabled = true;
         neutralFace.enabled = false;
         angryFace.enabled = false;
-
     }
-
 
     void Update()
     {
         customerTimer = customerTimer - Time.deltaTime;
 
         if (customerTimer <= 0)
-        {
-            Destroy(gameObject);
+        {        
+            agent.destination = resturantExitBox.position;           
         }
 
         if (customerTimer <= angryTime)
-        {            
-
+        {
             happyFace.enabled = false;
             neutralFace.enabled = false;
             angryFace.enabled = true;
@@ -50,9 +53,18 @@ public class CustomerSatisfaction : MonoBehaviour
         }
 
         else
-            happyFace.enabled = true;
-        
-        Debug.Log(customerTimer);
+            happyFace.enabled = true;      
+      
 
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("hi");
+        if (other.CompareTag("ResturantExit"))
+        {
+            Destroy(gameObject);
+        }
+        
     }
 }
